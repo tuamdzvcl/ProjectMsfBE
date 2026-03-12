@@ -1,0 +1,35 @@
+﻿using AutoMapper;
+using EventTick.Model.Models;
+using projectDemo.DTO.Projection;
+using projectDemo.DTO.Request;
+using projectDemo.DTO.Response;
+using projectDemo.DTO.UpdateRequest;
+
+namespace projectDemo.Mapper
+{
+    public class EventProfile : Profile
+    {
+        public EventProfile() {
+            CreateMap<EventRequest, Event>()
+           .ForMember(dest => dest.Id,
+            opt => opt.MapFrom(_ => Guid.NewGuid())
+            );
+
+            // Entity -> Response
+            CreateMap<Event, EventResponse>()
+                .ForMember(dest => dest.EventID,
+                    opt => opt.MapFrom(src => src.Id))
+                .ForMember(dest => dest.Status,
+                    opt => opt.MapFrom(src => src.Status.ToString()));
+
+            CreateMap<EventUpdateRequest, Event>();
+
+            CreateMap<Order, OrderResponse>();
+
+
+            CreateMap<CreateOrderRequest, OrderDetail>();
+                
+            
+        }
+    }
+}
