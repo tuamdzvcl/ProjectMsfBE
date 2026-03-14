@@ -1,26 +1,49 @@
 ﻿using EventTick.Model.Enum;
 using EventTick.Model.Models;
+using Microsoft.EntityFrameworkCore;
 using projectDemo.Data;
+using projectDemo.Repository.BaseData;
 using projectDemo.Repository.Ipml;
+using projectDemo.UnitOfWorks;
 
 namespace projectDemo.Repository
 {
-    public class RoleRepository : IRoleRepository
+    public class RoleRepository : RepositoryLinqBase<Role>, IRoleRepository
     {
-        private readonly EventTickDbContext _context;
-
-        public RoleRepository(EventTickDbContext context)
+        private readonly RepositoryProcBase _procBase;
+        public RoleRepository(IUnitOfWork uow) : base(uow)
         {
-            _context = context;
+            _procBase = new RepositoryProcBase(uow);
         }
 
-        public async Task<int> GetOrCreateAsync(Role roleName)
+        public  string DeleteAsync(Role role)
         {
-          await _context.Role.AddAsync(roleName);
-            return roleName.Id;
+            _dbSet.Remove(role);
+            return "Deleted";
+            
         }
 
+        public async Task<Role?> GetByid(int roleid)
+        {
+           return await _dbSet.FirstOrDefaultAsync(x => x.Id == roleid && x.IsDeleted == false);
+            
+        }
 
-        
+        public async Task<int> GetOrCreateAsync(Role role)
+        {
+             await _dbContext.AddAsync(role);
+            return role.Id;
+        }
+
+        public async Task<Role?> GetRole(string roleName)
+        {
+          return  await _dbSet.FirstOrDefaultAsync(x=>x.RoleName == roleName);
+        }
+
+        public  Role Update(Role role)
+        {
+              _dbSet.Update(role);
+            return role;
+        }
     }
 }

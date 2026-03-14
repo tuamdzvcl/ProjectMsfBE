@@ -42,7 +42,8 @@ namespace projectDemo.Service.TicketTypeService
                 Name = request.Name,
                 SoldQuantity = request.SoldQuantity,
                 Status = request.Status,
-                TotalQuantity = request.TotalQuantity
+                TotalQuantity = request.TotalQuantity,
+                IsDeleted=false
 
             };
            var entity = await _ticketRepositorys.CreateTicketType(ticket);

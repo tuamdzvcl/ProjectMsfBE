@@ -1,11 +1,12 @@
-﻿using EventTick.Model.Models;
+﻿using EventTick.Model.asbtract;
+using EventTick.Model.Models;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace projectDemo.Entity.Models
 {
     [Table("RolePermissions")]
-    public class RolePermissions
+    public class RolePermissions : Auditable
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

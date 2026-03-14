@@ -4,5 +4,7 @@
     {
         public string PermissonsName { get; set; }
 
+        public string PermissonsDescription { get; set; }
+
     }
 }

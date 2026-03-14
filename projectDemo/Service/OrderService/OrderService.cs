@@ -7,11 +7,13 @@ using projectDemo.Data;
 using projectDemo.DTO.Request;
 using projectDemo.DTO.Respone;
 using projectDemo.DTO.Response;
+using projectDemo.DTO.UpdateRequest;
 using projectDemo.Entity.Enum;
 using projectDemo.Repository.Ipml;
 using projectDemo.Repository.OrderRepository;
 using projectDemo.Repository.TickTypeRepository;
 using projectDemo.UnitOfWorks;
+using System.Collections.Generic;
 using System.Net.WebSockets;
 
 namespace projectDemo.Service.OrderService
@@ -79,6 +81,7 @@ namespace projectDemo.Service.OrderService
                     CreatedBy = user.Username,
                     CreatedDate = DateTime.Now,
                     UserID = user.Id,
+                    IsDeleted = false,
                     OrderDetails = new List<OrderDetail>()
                 };
                 foreach(var item in request.Items)
@@ -207,18 +210,36 @@ namespace projectDemo.Service.OrderService
         }
 
         //lấy tất cả order
-        public Task<ApiResponse<OrderResponse>> GetOrder()
+        public async Task<ApiResponse<List<OrderResponse>>> GetOrder()
         {
-            throw new NotImplementedException();
+           var order = await _orderRepository.GetALl();
+          var response =  order.Select(x => new OrderResponse
+          {
+                OrderCode=x.OrderCode,
+                OrderID=x.Id,
+                TotalAmount=x.TotalAmount,
+                Status=x.Status.ToString()
+                
+
+          }).ToList();
+            return ApiResponse <List<OrderResponse>>.SuccessResponse(Entity.Enum.EnumStatusCode.SUCCESS, response);
+            
         }
         //sủa order
-        public Task<ApiResponse<string>> UpdateOrder(Guid orderID, CreateOrderRequest request)
+        public async Task<ApiResponse<string>> UpdateOrder(Guid orderID, OrderUpdate request)
         {
-            var order = _orderRepository.GetOrderbyID(orderID);
+            var order = await _orderRepository.GetOrderbyID(orderID);
             if (order == null)
             {
-
+                return ApiResponse<string>.FailResponse(Entity.Enum.EnumStatusCode.SERVER, "Không tìm thấy order");
             }
+            var map = new OrderUpdate
+            {
+                TotalAmount = request.TotalAmount,
+                Status = request.Status,
+            };
+            await _uow.SaveChangesAsync();
+            return ApiResponse<string>.SuccessResponse(Entity.Enum.EnumStatusCode.SUCCESS, "Sửa thành công ");
         }
     }
 }

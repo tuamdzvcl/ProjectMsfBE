@@ -5,8 +5,16 @@ namespace projectDemo.Repository.Ipml
 {
     public interface IUserReposiotry
     {
-         Task<string> GetRoleByUser(Guid Userid);
+        Task<string> GetRoleByUser(Guid Userid);
         Task<User> GetUserByid(Guid id);
         Task<(List<Event>, int status, string messager)> GetListEventByUserID(Guid userID);        
+        Task<User> Create(User user);
+        User Update(User user);
+        string Delete(User user);
+
+
+
+        Task<(List<User>, int)> GetAll(int pageIndex, int pageSize, string key);
+
     }
 }

@@ -14,6 +14,7 @@
           PAYISFALSE=111,
           USERNOTFOUND=112,
           Tick=113,
+          RoleNameNOTFOUND =114,
           SERVER = 500,
           AUTHOU = 401,
           SUCCESS = 200

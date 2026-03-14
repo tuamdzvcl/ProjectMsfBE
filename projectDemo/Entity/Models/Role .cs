@@ -1,4 +1,5 @@
-﻿using EventTick.Model.Enum;
+﻿using EventTick.Model.asbtract;
+using EventTick.Model.Enum;
 using projectDemo.Entity.Models;
 using System;
 using System.Collections.Generic;
@@ -10,14 +11,14 @@ using System.Threading.Tasks;
 
 namespace EventTick.Model.Models
 {
-    [Table("Role")]
-    public class Role
+    [Table("Role")] 
+    public class Role : Auditable
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         [Required]
-        public EnumRoleName RoleName { get; set; }
+        public string RoleName { get; set; }
 
         public virtual ICollection<UserRole> UserRole { get; set;}
 

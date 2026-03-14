@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 namespace EventTick.Model.Models
 {
     [Table("OrderDetail")]
-    public class OrderDetail : Auditable
+    public class OrderDetail 
     {
         [Key]
 

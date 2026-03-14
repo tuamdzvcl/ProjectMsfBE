@@ -15,9 +15,8 @@ namespace projectDemo.DTO.Response
             public DateTime SaleEndDate { get; set; }
             public string PosterUrl { get; set; }
             public string Status { get; set; }
-            [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-
-            public Guid? UserID { get; set; }
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public Guid? UserID { get; set; } = null;
         
     }
 }

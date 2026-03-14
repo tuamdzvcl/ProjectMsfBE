@@ -34,13 +34,10 @@ namespace projectDemo.Repository
         public async Task<List<Event>> GetAllEvent()
         {
             return await _context.Event
-                .Where(e => e.Status != EnumStatusEvent.CANNEL)
+                .Where(e => e.Status != EnumStatusEvent.CANNEL && e.IsDeleted==false)
                 .AsNoTracking()
                 .ToListAsync();
-
         }
-
-
         public async Task<Event> GetEventById(Guid eventId)
         {
             

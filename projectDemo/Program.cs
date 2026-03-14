@@ -1,21 +1,28 @@
 ﻿    using Microsoft.AspNetCore.Authentication.JwtBearer;
-    using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.EntityFrameworkCore;
     using Microsoft.IdentityModel.Tokens;
-    using projectDemo.Data;
-    using projectDemo.Mapper;
+using projectDemo.config;
+using projectDemo.Data;
+using projectDemo.Entity.Models;
+using projectDemo.Mapper;
     using projectDemo.Middlewares;
     using projectDemo.Repository;
     using projectDemo.Repository.Ipml;
 using projectDemo.Repository.OrderRepository;
+using projectDemo.Repository.PemisstionRepository;
+using projectDemo.Repository.RolePermissionRepository;
 using projectDemo.Repository.TickTypeRepository;
     using projectDemo.Service.Auth;
     using projectDemo.Service.EventService;
 using projectDemo.Service.OrderService;
+using projectDemo.Service.PermissionService;
 using projectDemo.Service.TicketTypeService;
 using projectDemo.Service.UserService;
 using projectDemo.UnitOfWork;
     using projectDemo.UnitOfWorks;
     using System.Text;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
     namespace projectDemo
@@ -60,6 +67,38 @@ using System.Text.Json.Serialization;
                             IssuerSigningKey = new SymmetricSecurityKey(
                                 Encoding.UTF8.GetBytes(jwtSettings["SecretKey"]!)
                             )
+                        };
+                        options.Events = new JwtBearerEvents
+                        {
+                            OnChallenge = async context =>
+                            {
+                                context.HandleResponse();
+
+                                context.Response.StatusCode = 401;
+                                context.Response.ContentType = "application/json";
+
+                                var result = JsonSerializer.Serialize(new
+                                {
+                                    statusCode = 401,
+                                    message = "Bạn chưa đăng nhập hoặc token đã hết hạn"
+                                });
+
+                                await context.Response.WriteAsync(result);
+                            },
+
+                            OnForbidden = async context =>
+                            {
+                                context.Response.StatusCode = 403;
+                                context.Response.ContentType = "application/json";
+
+                                var result = JsonSerializer.Serialize(new
+                                {
+                                    statusCode = 403,
+                                    message = "Bạn không có quyền truy cập chức năng này"
+                                });
+
+                                await context.Response.WriteAsync(result);
+                            }
                         };
                     });
 
@@ -106,6 +145,7 @@ using System.Text.Json.Serialization;
                               .AllowAnyMethod();
                     });
             });
+            
             builder.Services.AddAuthorization(options =>
                 {
                     //user
@@ -169,17 +209,25 @@ using System.Text.Json.Serialization;
                 builder.Services.AddScoped<IEventService, EventService>();
                 builder.Services.AddScoped<IOrderService, OrderService>();
                 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
-            builder.Services.AddScoped<IOrderDetailRepository, OrderDetailRepository>();
+                builder.Services.AddScoped<IOrderDetailRepository, OrderDetailRepository>();
                 builder.Services.AddScoped<IUserReposiotry, UserRepository>();        
                 builder.Services.AddScoped<IUnitOfWork, UnitOfWorkk>();
-            
-                var app = builder.Build();
+                builder.Services.AddScoped<IPemisstionRepository, PemisstionRepository>();
+                builder.Services.AddScoped<IPemissionService, PemissionService>();
+                builder.Services.AddSingleton<IAuthorizationHandler, PermissionHandler>();
+            builder.Services.AddScoped<IRolePermissionRepository, RolePermissionRepository>();
+
+                 builder.Services.AddSingleton<IAuthorizationPolicyProvider,
+                     PermissionPolicyProvider>();
+                builder.Services.AddAuthorization();
+                 var app = builder.Build();
                 // Configure the HTTP request pipeline.
                 if (app.Environment.IsDevelopment())
                 {
                     app.UseSwagger();
                     app.UseSwaggerUI();
                 }
+
                 app.UseCors("AllowAngular");
 
                 app.UseMiddleware<ExceptionMiddleware>();

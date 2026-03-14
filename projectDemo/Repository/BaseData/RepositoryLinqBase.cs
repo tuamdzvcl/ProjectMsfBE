@@ -56,10 +56,7 @@ namespace projectDemo.Repository.BaseData
             _dbSet.RemoveRange(entities);
         }
 
-        public async Task SaveChangesAsync()
-        {
-            await _uow.SaveChangesAsync();
-        }
+       
 
        
     }

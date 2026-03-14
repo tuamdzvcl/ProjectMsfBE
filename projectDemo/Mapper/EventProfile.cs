@@ -4,6 +4,7 @@ using projectDemo.DTO.Projection;
 using projectDemo.DTO.Request;
 using projectDemo.DTO.Response;
 using projectDemo.DTO.UpdateRequest;
+using projectDemo.Entity.Models;
 
 namespace projectDemo.Mapper
 {
@@ -28,6 +29,10 @@ namespace projectDemo.Mapper
 
 
             CreateMap<CreateOrderRequest, OrderDetail>();
+
+            CreateMap<OrderUpdate, Order>();
+            CreateMap<PermisstionRequest, Permissions>();
+            CreateMap<Permissions, PermissionResponse>();
                 
             
         }

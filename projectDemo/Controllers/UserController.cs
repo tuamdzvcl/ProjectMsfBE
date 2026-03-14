@@ -17,10 +17,28 @@ namespace projectDemo.Controllers
             _userService = userService;
         }
 
-        [HttpGet("{id}/events")]
-        public async Task<IActionResult> GetAllEvent(Guid id)
+        [HttpGet("events")]
+        public async Task<IActionResult> GetAllEvent()
         {
-            var result = await _userService.GetListEventByUserID(id);
+            var userId = Guid.Parse(User.FindFirst("id").Value);
+
+            var result = await _userService.GetListEventByUserID(userId);
+            return Ok(result);
+        }
+        [HttpGet()]
+        public async Task<IActionResult> GetallUser(
+            [FromQuery] int pageIndex,
+            [FromQuery] int pageSize,
+            [FromQuery] string? key)
+            
+        {
+            var result = await _userService.GetAll(pageIndex,pageSize,key);
+            return Ok(result);
+        }
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            var result = await _userService.Delete(id);
             return Ok(result);
         }
     }

@@ -37,7 +37,7 @@ namespace projectDemo.Repository.OrderRepository
 
         public async Task<List<Order>> GetALl()
         {
-            var order = await _dbSet.Where(x=>x.IsDeleted!=null).ToListAsync();
+            var order = await _dbSet.Where(x=>x.IsDeleted==false).ToListAsync();
             return order;
         }
 
@@ -49,7 +49,7 @@ namespace projectDemo.Repository.OrderRepository
 
             var orders = await query
                 .OrderByDescending(x => x.CreatedDate)
-                .Where(x=>x.IsDeleted != null)
+                .Where(x=>x.IsDeleted == false)
                 .Select(x => x.Id)
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)
@@ -59,8 +59,7 @@ namespace projectDemo.Repository.OrderRepository
         }
         public async Task<Order?> GetOrderbyID(Guid orderID)
         {
-             return  await GetByIdAsync(orderID);
-
+            return await _dbSet.FirstOrDefaultAsync(x => x.Id == orderID && x.IsDeleted == false);
         }
 
         public async Task<(OrderProjection?,int statuss, string messager)> GetOrderListOrderDetail(Guid orderID)

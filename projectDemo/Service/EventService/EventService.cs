@@ -81,6 +81,7 @@ namespace projectDemo.Service.EventService
                     Description = resquest.Description,
                     Location = resquest.Location,
                     CreatedDate = DateTime.Now,
+                    IsDeleted= false
 
                 };
 

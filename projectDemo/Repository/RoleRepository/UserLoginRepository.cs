@@ -1,22 +1,41 @@
 ﻿using EventTick.Model.Models;
+using Microsoft.EntityFrameworkCore;
 using projectDemo.Data;
+using projectDemo.Repository.BaseData;
 using projectDemo.Repository.Ipml;
+using projectDemo.UnitOfWorks;
 
 namespace projectDemo.Repository
 {
-    public class UserLoginRepository : IUserLoginRepository
+    public class UserLoginRepository :RepositoryLinqBase<UserLogin>,IUserLoginRepository
     {
-        private readonly EventTickDbContext _context;
+        private readonly RepositoryProcBase _proc;
 
-        public UserLoginRepository(EventTickDbContext context)
+        public UserLoginRepository(IUnitOfWork uow) : base(uow)
         {
-            _context = context;
+            _proc = new RepositoryProcBase(uow);
+        }
+
+        public string DeleteAsync(UserLogin userLogin)
+        {
+            _dbSet.Remove(userLogin);
+            return "Deleted";
+        }
+
+        public async Task<UserLogin?> getbyid(int user)
+        {
+          return  await _dbSet.FirstOrDefaultAsync(x => x.Id == user && x.IsDeleted == false);
         }
 
         public async Task InsertAsync(UserLogin userLogin)
         {
-           await _context.AddAsync(userLogin);
+           await _dbSet.AddAsync(userLogin);
         }
-        
+
+        public UserLogin Update(UserLogin userLogin)
+        {
+             _dbSet.Update(userLogin);
+            return userLogin;
+        }
     }
 }

@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using projectDemo.config;
 using projectDemo.DTO.Request;
+using projectDemo.DTO.UpdateRequest;
 using projectDemo.Service.OrderService;
 
 namespace projectDemo.Controllers
@@ -18,9 +20,7 @@ namespace projectDemo.Controllers
             _orderService = orderService;
         }
 
-        /// <summary>
-        /// Tạo Order
-        /// </summary>
+        
         [HttpPost]
         public async Task<IActionResult> CreateOrder([FromBody] CreateOrderRequest request)
         {
@@ -30,20 +30,17 @@ namespace projectDemo.Controllers
             return Ok(result);
         }
 
-        /// <summary>
-        /// Lấy Order theo ID
-        /// </summary>
-        [HttpGet("{orderId}")]
-        public async Task<IActionResult> GetOrder(Guid orderId)
+        [Permission("USER_CREATE")]
+        [HttpGet()]
+        public async Task<IActionResult> GetOrder()
         {
-            var result = await _orderService.GetOrder(orderId);
+            var result = await _orderService.GetOrder();
             return Ok(result);
         }
 
-        /// <summary>
-        /// Lấy danh sách Order theo User
-        /// </summary>
+       
         [HttpGet("user/{userId}")]
+
         public async Task<IActionResult> GetListOrderByUser(
             [FromQuery] int pageIndex ,
             [FromQuery] int pageSize )
@@ -53,9 +50,7 @@ namespace projectDemo.Controllers
             return Ok(result);
         }
 
-        /// <summary>
-        /// Lấy chi tiết Order
-        /// </summary>
+       
         [HttpGet("{orderId}/detail")]
         [AllowAnonymous]
         public async Task<IActionResult> GetOrderDetail(Guid orderId)
@@ -64,20 +59,20 @@ namespace projectDemo.Controllers
             return Ok(result);
         }
 
-        /// <summary>
-        /// Update Order
-        /// </summary>
+        
         [HttpPut("{orderId}")]
-        public async Task<IActionResult> UpdateOrder(Guid orderId, [FromBody] CreateOrderRequest request)
+        [AllowAnonymous]
+
+        public async Task<IActionResult> UpdateOrder(Guid orderId, [FromBody] OrderUpdate request)
         {
             var result = await _orderService.UpdateOrder(orderId, request);
             return Ok(result);
         }
 
-        /// <summary>
-        /// Delete Order
-        /// </summary>
+       
         [HttpDelete("{orderId}")]
+        [AllowAnonymous]
+
         public async Task<IActionResult> DeleteOrder(Guid orderId)
         {
             var result = await _orderService.DeleteOrder(orderId);

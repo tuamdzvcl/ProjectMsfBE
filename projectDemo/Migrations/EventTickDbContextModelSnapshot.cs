@@ -137,16 +137,6 @@ namespace projectDemo.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("CreatedBy")
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
-
-                    b.Property<DateTime?>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool?>("IsDeleted")
-                        .HasColumnType("bit");
-
                     b.Property<Guid>("OrderID")
                         .HasColumnType("uniqueidentifier");
 
@@ -158,13 +148,6 @@ namespace projectDemo.Migrations
 
                     b.Property<int>("TicketTypeId")
                         .HasColumnType("int");
-
-                    b.Property<string>("UpdatedBy")
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
-
-                    b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
@@ -238,8 +221,26 @@ namespace projectDemo.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("RoleName")
-                        .HasColumnType("int");
+                    b.Property<string>("CreatedBy")
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool?>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("RoleName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
@@ -249,17 +250,20 @@ namespace projectDemo.Migrations
                         new
                         {
                             Id = 1,
-                            RoleName = 1
+                            IsDeleted = false,
+                            RoleName = "ADMIN"
                         },
                         new
                         {
                             Id = 2,
-                            RoleName = 2
+                            IsDeleted = false,
+                            RoleName = "ORGANIZER"
                         },
                         new
                         {
                             Id = 3,
-                            RoleName = 3
+                            IsDeleted = false,
+                            RoleName = "CUSTOMER"
                         });
                 });
 
@@ -441,7 +445,7 @@ namespace projectDemo.Migrations
                             IsDeleted = false,
                             IsLock = false,
                             LastName = "admin",
-                            PasswordHash = "$2a$11$OABloXQ2wOHUby2eNqVRB.h42I6W3Zswyl0dTkG.wiUHAVc73nc3K",
+                            PasswordHash = "$2a$11$OY5EoXBhlu1Z9.AQOxZU7OyE3eZK3DhJ7ErSAATeO3q80UdYN2UCy",
                             Username = "admin"
                         });
                 });
@@ -579,6 +583,16 @@ namespace projectDemo.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("CreatedBy")
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool?>("IsDeleted")
+                        .HasColumnType("bit");
+
                     b.Property<string>("PermissonsDescription")
                         .IsRequired()
                         .HasMaxLength(255)
@@ -589,6 +603,13 @@ namespace projectDemo.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
+                    b.Property<string>("UpdatedBy")
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
                     b.HasKey("Id");
 
                     b.ToTable("Permissions");
@@ -597,86 +618,135 @@ namespace projectDemo.Migrations
                         new
                         {
                             Id = 1,
+                            IsDeleted = false,
                             PermissonsDescription = "tạo mới user",
-                            PermissonsName = "user.create"
+                            PermissonsName = "USER_CREATE"
                         },
                         new
                         {
                             Id = 2,
+                            IsDeleted = false,
                             PermissonsDescription = "sửa user",
-                            PermissonsName = "user.update"
+                            PermissonsName = "USER_UPDATE"
                         },
                         new
                         {
                             Id = 3,
+                            IsDeleted = false,
                             PermissonsDescription = "xóa user",
-                            PermissonsName = "user.delete"
+                            PermissonsName = "USER_DELETE"
                         },
                         new
                         {
                             Id = 4,
+                            IsDeleted = false,
                             PermissonsDescription = "xem user",
-                            PermissonsName = "user.view"
+                            PermissonsName = "USER_VIEW"
                         },
                         new
                         {
                             Id = 5,
+                            IsDeleted = false,
                             PermissonsDescription = "tạo role mới",
-                            PermissonsName = "role.create"
+                            PermissonsName = "ROLE_CREATE"
                         },
                         new
                         {
                             Id = 6,
+                            IsDeleted = false,
                             PermissonsDescription = " sửa role",
-                            PermissonsName = "role.update"
+                            PermissonsName = "ROLE_UPDATE"
                         },
                         new
                         {
                             Id = 7,
+                            IsDeleted = false,
                             PermissonsDescription = " xóa role",
-                            PermissonsName = "role.delete"
+                            PermissonsName = "ROLE_DELETE"
                         },
                         new
                         {
                             Id = 8,
+                            IsDeleted = false,
                             PermissonsDescription = " xem role",
-                            PermissonsName = "role.view"
+                            PermissonsName = "ROLE_VIEW"
                         },
                         new
                         {
                             Id = 9,
+                            IsDeleted = false,
                             PermissonsDescription = "tạo mới event",
-                            PermissonsName = "event.create"
+                            PermissonsName = "EVENT_CREATE"
                         },
                         new
                         {
                             Id = 10,
+                            IsDeleted = false,
                             PermissonsDescription = "sửa  event",
-                            PermissonsName = "event.update"
+                            PermissonsName = "EVENT_UPDATE"
                         },
                         new
                         {
                             Id = 11,
+                            IsDeleted = false,
                             PermissonsDescription = "xóa  event",
-                            PermissonsName = "event.delete"
+                            PermissonsName = "EVENT_DELETE"
                         },
                         new
                         {
                             Id = 12,
+                            IsDeleted = false,
                             PermissonsDescription = " xem event",
-                            PermissonsName = "event.view"
+                            PermissonsName = "EVENT_VIEW"
                         },
                         new
                         {
                             Id = 13,
+                            IsDeleted = false,
                             PermissonsDescription = "xem tổng vé của event",
-                            PermissonsName = "event.getTotalTickbyid"
+                            PermissonsName = "EVENT_GETTOTALTICKBYID"
                         },
                         new
                         {
                             Id = 14,
+                            IsDeleted = false,
                             PermissonsDescription = "xem tổng vé theo user",
-                            PermissonsName = "event.getTotalTickByUser"
+                            PermissonsName = "EVENT_GETTOTALTICKBYUSER"
+                        },
+                        new
+                        {
+                            Id = 15,
+                            IsDeleted = false,
+                            PermissonsDescription = "tạo mới TypeTicket",
+                            PermissonsName = "TYPETICKET_CREATE"
+                        },
+                        new
+                        {
+                            Id = 16,
+                            IsDeleted = false,
+                            PermissonsDescription = "sửa  TypeTicket",
+                            PermissonsName = "TYPETICKET_UPDATE"
+                        },
+                        new
+                        {
+                            Id = 17,
+                            IsDeleted = false,
+                            PermissonsDescription = "xóa  TypeTicket",
+                            PermissonsName = "TYPETICKET_DELETE"
+                        },
+                        new
+                        {
+                            Id = 18,
+                            IsDeleted = false,
+                            PermissonsDescription = " xem TypeTicket",
+                            PermissonsName = "TYPETICKET_VIEW"
+                        },
+                        new
+                        {
+                            Id = 19,
+                            IsDeleted = false,
+                            PermissonsDescription = "xem tổng vé của TypeTicket",
+                            PermissonsName = "TYPETICKET_GETROLEBYID"
                         });
                 });
 
@@ -688,6 +758,23 @@ namespace projectDemo.Migrations
                     b.Property<int>("PermissionId")
                         .HasColumnType("int");
 
+                    b.Property<string>("CreatedBy")
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool?>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
                     b.HasKey("RoleId", "PermissionId");
 
                     b.HasIndex("PermissionId");
@@ -698,7 +785,8 @@ namespace projectDemo.Migrations
                         new
                         {
                             RoleId = 1,
-                            PermissionId = 1
+                            PermissionId = 1,
+                            IsDeleted = false
                         });
                 });
 

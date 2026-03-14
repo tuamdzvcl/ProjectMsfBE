@@ -19,9 +19,6 @@ namespace projectDemo.Mapper
                .ForMember(dest => dest.Status,
                    opt => opt.MapFrom(src => src.Status.ToString())
                )
-               .ForMember(dest => dest.RoleName,
-                   opt => opt.MapFrom(src => src.RoleName.ToString())
-               )
                .ForMember(dest => dest.ListTypeTick,
                     opt => opt.MapFrom(src => src.listTypeTick)); 
              

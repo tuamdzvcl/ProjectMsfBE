@@ -12,7 +12,7 @@ namespace projectDemo.DTO.Response
 
         public List<string> RoleName { get; set; }
 
-        public string ID { get; set;}
+        public Guid ID { get; set;}
         public DateTime? DateLock { get; set; }
         public int? Isfalse { get; set; }
     }

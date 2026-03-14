@@ -19,6 +19,18 @@ namespace projectDemo.Repository
             _proc = new RepositoryProcBase(uow);
         }
 
+        public async Task<User> Create(User user)
+        {
+            await _dbSet.AddAsync(user);
+            return user;
+        }
+        //xóa mềm 
+        public string Delete(User user)
+        {
+            _dbSet.Remove(user);
+            return "Deleted";
+        }
+        //get ds event theo userid 
         public async Task<(List<Event>,int status,string messager)> GetListEventByUserID(Guid userID)
         {
             try 
@@ -47,7 +59,7 @@ namespace projectDemo.Repository
             }
             
         }
-
+        //get tên role by id
         public async Task<string> GetRoleByUser(Guid Userid)
         {
             try
@@ -69,10 +81,36 @@ namespace projectDemo.Repository
                 return ( ex.Message);
             }
         }
-
+        // thông tin user
         public async Task<User?> GetUserByid(Guid id)
         {
-            return await _dbSet.FirstOrDefaultAsync(x => x.Id == id);
+            return await _dbSet.FirstOrDefaultAsync(x => x.Id == id && x.IsDeleted==false);
         }
+        //update
+        public User Update(User user)
+        {
+            _dbSet.Update(user);
+            return user;
+        }
+        //10 bản ghi
+        public async Task<(List<User>,int)> GetAll(int pageIndex,int pageSize, string key)
+        {
+            var query = _dbSet.Where(x => x.IsDeleted==false);
+
+            if (!string.IsNullOrEmpty(key))
+            {
+                query = query.Where(x => x.Username.Contains(key));
+            }
+
+            var total = await query.CountAsync();
+
+            var data = await query
+                .Skip((pageIndex - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+            return (data, total);
+        }
+
+        
     }
 }

@@ -95,7 +95,7 @@ namespace projectDemo.Service.Auth
                     FirstName = user.FirstName,
                     LastName = user.LastName,
                     Email = user.Email,
-                    ID = user.Id.ToString(),
+                    ID = user.Id,
                     RoleName = roles
                 };
 
@@ -114,9 +114,7 @@ namespace projectDemo.Service.Auth
             var claim = new List<Claim>
             {
                     new Claim("id", user.Id.ToString()),
-                    new Claim(ClaimTypes.Email, user.Email),
-
-
+                    new Claim("Email", user.Email),
             };
             foreach (var role in user.UserRoles)
             {
@@ -169,7 +167,8 @@ namespace projectDemo.Service.Auth
                     CreatedDate = DateTime.UtcNow,
                     CreatedBy = "System",
                     Isfalse = 0,
-                    PasswordHash = password
+                    PasswordHash = password,
+                    IsDeleted = false
 
 
                 };
@@ -199,7 +198,7 @@ namespace projectDemo.Service.Auth
 
                 var response = new UserResponse
                 {
-                    ID = user.Id.ToString(),
+                    ID = user.Id,
                     Username = user.Username,
                     Email = user.Email,
                     FirstName = user.FirstName,

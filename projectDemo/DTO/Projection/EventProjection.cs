@@ -17,7 +17,7 @@ namespace projectDemo.DTO.Projection
         public string PosterUrl { get; set; }
         public EnumStatusEvent Status { get; set; }
         public string UserName { get; set; }
-        public EnumRoleName RoleName { get; set; }
+        public string RoleName { get; set; }
 
         public List<TicketType> listTypeTick {  get; set; }
     }
